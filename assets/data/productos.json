@@ -1,0 +1,93 @@
+{
+  "whatsapp": "5219933840634",
+  "hojaCalculoCSV": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRTTtxNQBsXKlBCygpGeM8zRzqQIxd0uj2g4u9_nEp6InE5pmV3rvnJZYP7Qz8spyoeZorRUXV7fkE/pub?gid=0&single=true&output=csv",
+  "categorias": [
+    { "id": "todas", "nombre": "Todas" },
+    { "id": "blusas", "nombre": "Blusas bordadas" },
+    { "id": "conjuntos", "nombre": "Conjuntos" },
+    { "id": "tiras", "nombre": "Tiras bordadas" }
+  ],
+  "productos": [
+    {
+      "id": "blusa-flores-multicolor",
+      "categoria": "blusas",
+      "nombre": "Blusa Flores Multicolor",
+      "descripcion": "Blusa de escote descubierto, bordado floral multicolor en punto de lomillo sobre fondo negro.",
+      "precio": null,
+      "unidad": "pieza",
+      "imagen": "assets/img/productos/blusa-flores-multicolor.jpg"
+    },
+    {
+      "id": "blusa-hibiscus",
+      "categoria": "blusas",
+      "nombre": "Blusa Hibiscus",
+      "descripcion": "Blusa blanca con holanes y panel bordado de hibiscos en punto de lomillo.",
+      "precio": null,
+      "unidad": "pieza",
+      "imagen": "assets/img/productos/blusa-hibiscus.jpg"
+    },
+    {
+      "id": "conjunto-falda-blusa",
+      "categoria": "conjuntos",
+      "nombre": "Conjunto Falda y Blusa Tradicional",
+      "descripcion": "Falda floral con tiras bordadas a juego y blusa blanca de escote descubierto, conjunto completo hecho a mano.",
+      "precio": null,
+      "unidad": "conjunto",
+      "imagen": "assets/img/productos/conjunto-falda-blusa.jpg"
+    },
+    {
+      "id": "tira-hibiscus-negro",
+      "categoria": "tiras",
+      "nombre": "Tira Hibiscus Negro",
+      "descripcion": "Tira bordada en punto de lomillo, hibiscos sobre fondo negro.",
+      "precio": null,
+      "unidad": "metro",
+      "imagen": "assets/img/productos/tira-hibiscus-negro.jpg"
+    },
+    {
+      "id": "tira-floral-crema",
+      "categoria": "tiras",
+      "nombre": "Tira Floral Crema",
+      "descripcion": "Tira bordada en punto de lomillo sobre base crema, flores rojas y doradas.",
+      "precio": null,
+      "unidad": "metro",
+      "imagen": "assets/img/productos/tira-floral-crema.jpg"
+    },
+    {
+      "id": "tira-azul",
+      "categoria": "tiras",
+      "nombre": "Tira Floral Azul",
+      "descripcion": "Tira bordada en punto de lomillo, flores en tonos azules sobre base clara.",
+      "precio": null,
+      "unidad": "metro",
+      "imagen": "assets/img/productos/tira-azul.jpg"
+    },
+    {
+      "id": "tira-magenta",
+      "categoria": "tiras",
+      "nombre": "Tira Floral Magenta",
+      "descripcion": "Tira bordada en punto de lomillo sobre base magenta, flores en tonos cálidos.",
+      "precio": null,
+      "unidad": "metro",
+      "imagen": "assets/img/productos/tira-magenta.jpg"
+    },
+    {
+      "id": "tira-tropical",
+      "categoria": "tiras",
+      "nombre": "Tira Tropical",
+      "descripcion": "Tira bordada en punto de lomillo con motivo tropical, hojas y flores en tonos verdes y rosas.",
+      "precio": null,
+      "unidad": "metro",
+      "imagen": "assets/img/productos/tira-tropical.jpg"
+    },
+    {
+      "id": "tira-roja-clasica",
+      "categoria": "tiras",
+      "nombre": "Tira Clásica Roja",
+      "descripcion": "Tira bordada en punto de lomillo, diseño clásico en rojo, verde y amarillo.",
+      "precio": null,
+      "unidad": "metro",
+      "imagen": "assets/img/productos/tira-roja-clasica.jpg"
+    }
+  ]
+}
