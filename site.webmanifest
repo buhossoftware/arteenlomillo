@@ -1,0 +1,23 @@
+{
+  "name": "Arte en Lomillo",
+  "short_name": "Arte en Lomillo",
+  "description": "Bordado artesanal hecho a mano en punto de lomillo, Nacajuca, Tabasco.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf6ef",
+  "theme_color": "#7a2145",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "assets/img/iconos/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/iconos/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
