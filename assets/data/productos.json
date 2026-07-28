@@ -44,7 +44,8 @@
       "descripcion": "Tira bordada en punto de lomillo sobre fondo negro, en los colores tradicionales.",
       "imagen": "assets/img/productos/tira-hibiscus-negro.jpg",
       "tipoPrecio": "puntada",
-      "puntadasDisponibles": [5, 10, 12, 14, 16, 20, 23, 30]
+      "exclusivo": true,
+      "puntadasDisponibles": [23]
     },
     {
       "id": "tira-floral-crema",
@@ -53,7 +54,8 @@
       "descripcion": "Tira bordada en punto de lomillo sobre base crema, flores rojas y doradas.",
       "imagen": "assets/img/productos/tira-floral-crema.jpg",
       "tipoPrecio": "puntada",
-      "puntadasDisponibles": [5, 10, 12, 14, 16, 20, 23, 30]
+      "exclusivo": true,
+      "puntadasDisponibles": [23]
     },
     {
       "id": "tira-azul",
@@ -62,7 +64,8 @@
       "descripcion": "Tira bordada en punto de lomillo, flores en tonos azules sobre base clara.",
       "imagen": "assets/img/productos/tira-azul.jpg",
       "tipoPrecio": "puntada",
-      "puntadasDisponibles": [5, 10, 12, 14, 16, 20, 23, 30]
+      "exclusivo": true,
+      "puntadasDisponibles": [23]
     },
     {
       "id": "tira-magenta",
@@ -71,7 +74,8 @@
       "descripcion": "Tira bordada en punto de lomillo sobre base magenta, flores en tonos cálidos.",
       "imagen": "assets/img/productos/tira-magenta.jpg",
       "tipoPrecio": "puntada",
-      "puntadasDisponibles": [5, 10, 12, 14, 16, 20, 23, 30]
+      "exclusivo": true,
+      "puntadasDisponibles": [23]
     },
     {
       "id": "tira-tropical",

@@ -105,12 +105,22 @@ function crearBloquePrecio(producto) {
 
     return `
       <div class="producto-card__campo">
-        <label for="${idSelect}">Talla</label>
+        <label for="${idSelect}">Elige tu talla</label>
         <select id="${idSelect}" data-rol="talla">
           ${opciones}
         </select>
       </div>
       <p class="producto-card__precio" data-rol="precio-mostrado"></p>
+    `;
+  }
+
+  if (producto.tipoPrecio === 'puntada' && producto.exclusivo) {
+    const puntadaFija = producto.puntadasDisponibles[0];
+    const precioPorMetro = puntadaFija * producto.precioPorPuntada;
+
+    return `
+      <p class="producto-card__precio" data-rol="precio-mostrado">${formatoMXN(precioPorMetro)} <span>/ metro (${puntadaFija} puntadas)</span></p>
+      <p class="producto-card__nota-exclusiva">Este diseño solo está disponible en ${puntadaFija} puntadas. ¿Buscas otra cantidad de puntadas, más metros o algún detalle? Pregúntanos por WhatsApp.</p>
     `;
   }
 
@@ -162,6 +172,17 @@ function actualizarPrecioMostrado(card, producto) {
     return { talla, precio, resumen: precio ? `Talla ${talla}: ${formatoMXN(precio)}` : `Talla ${talla} (consultar precio)` };
   }
 
+  if (producto.tipoPrecio === 'puntada' && producto.exclusivo) {
+    const puntadaFija = producto.puntadasDisponibles[0];
+    const precioPorMetro = puntadaFija * producto.precioPorPuntada;
+
+    return {
+      puntada: puntadaFija,
+      precioPorMetro,
+      resumen: `Diseño exclusivo, ${puntadaFija} puntadas — ${formatoMXN(precioPorMetro)}/m (metraje a confirmar por WhatsApp)`,
+    };
+  }
+
   if (producto.tipoPrecio === 'puntada') {
     const puntada = Number(card.querySelector('[data-rol="puntada"]').value);
     const campoMetros = card.querySelector('[data-rol="metros"]');
@@ -203,17 +224,19 @@ function crearTarjetaProducto(producto, numeroWhatsapp, likesScriptURL) {
     </div>
     <div class="producto-card__cuerpo">
       <p class="producto-card__categoria">Bordado artesanal · Hecho a mano</p>
+      ${producto.exclusivo ? '<span class="etiqueta-exclusiva">Diseño exclusivo</span>' : ''}
       <h3 class="producto-card__nombre">${producto.nombre}</h3>
       <p class="producto-card__descripcion">${producto.descripcion}</p>
       ${crearBloquePrecio(producto)}
       <div class="producto-card__campo">
-        <label for="${idNota}">Notas para tu pedido (opcional)</label>
+        <label for="${idNota}">¿Te encantó? Cuéntanos los detalles y pídelo ahora</label>
         <div class="producto-card__input-grupo">
-          <input type="text" id="${idNota}" placeholder="Ej. color, preferencia especial" />
-          <button type="button" class="boton-flecha" data-rol="enviar-pedido" aria-label="Pedir ${producto.nombre} por WhatsApp">
+          <input type="text" id="${idNota}" placeholder="Escribe aquí y presiona enviar" />
+          <button type="button" class="boton-flecha" data-rol="enviar-pedido" aria-label="Enviar pedido de ${producto.nombre} por WhatsApp">
             ${crearIconoFlecha()}
           </button>
         </div>
+        <p class="producto-card__ayuda">Tu mensaje se envía directo por WhatsApp.</p>
       </div>
     </div>
   `;
@@ -225,6 +248,11 @@ function crearTarjetaProducto(producto, numeroWhatsapp, likesScriptURL) {
     control.addEventListener('change', refrescarPrecio);
     control.addEventListener('input', refrescarPrecio);
   });
+
+  const campoMetros = card.querySelector('[data-rol="metros"]');
+  if (campoMetros) {
+    campoMetros.addEventListener('focus', () => campoMetros.select());
+  }
 
   const botonEnviar = card.querySelector('[data-rol="enviar-pedido"]');
   botonEnviar.addEventListener('click', () => {
