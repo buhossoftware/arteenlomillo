@@ -84,13 +84,14 @@
       "descripcion": "Tira bordada en punto de lomillo con motivo tropical, hojas y flores en tonos verdes y rosas.",
       "imagen": "assets/img/productos/tira-tropical.jpg",
       "tipoPrecio": "puntada",
-      "puntadasDisponibles": [5, 10, 12, 14, 16, 20, 23, 30]
+      "exclusivo": true,
+      "puntadasDisponibles": [23]
     },
     {
       "id": "tira-roja-clasica",
       "categoria": "tiras",
-      "nombre": "Tira Clásica Roja",
-      "descripcion": "Tira bordada en punto de lomillo, diseño clásico en rojo, verde y amarillo.",
+      "nombre": "Tira Bordada Tradicional",
+      "descripcion": "Tira bordada en punto de lomillo, con tulipanes pequeños, con los colores tradicionales.",
       "imagen": "assets/img/productos/tira-roja-clasica.jpg",
       "tipoPrecio": "puntada",
       "puntadasDisponibles": [5, 10, 12, 14, 16, 20, 23, 30]
