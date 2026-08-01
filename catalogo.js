@@ -393,9 +393,11 @@ async function iniciarCatalogo() {
     if (!respuesta.ok) throw new Error('No se pudo cargar el catálogo.');
     const datos = await respuesta.json();
 
-    const { productos: preciosHoja, precioPorPuntada } = await obtenerDatosDesdeHoja(datos.hojaCalculoCSV);
+    const [{ productos: preciosHoja, precioPorPuntada }, conteosLikes] = await Promise.all([
+      obtenerDatosDesdeHoja(datos.hojaCalculoCSV),
+      obtenerConteosDesdeScript(datos.likesScriptURL),
+    ]);
     const tarifaPuntada = precioPorPuntada ?? datos.precioPorPuntadaDefault ?? 22;
-    const conteosLikes = await obtenerConteosDesdeScript(datos.likesScriptURL);
 
     datos.productos = datos.productos.map((producto) => {
       const override = preciosHoja[producto.id] || {};
