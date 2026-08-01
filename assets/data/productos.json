@@ -42,10 +42,11 @@
       "id": "conjunto-tradicional-azul",
       "categoria": "conjuntos",
       "nombre": "Conjunto Tradicional Azul Marino",
-      "descripcion": "Falda azul marino con cuatro tiras bordadas a juego en punto de lomillo y blusa blanca de escote descubierto, conjunto completo hecho a mano. La blusa y la falda también se pueden comprar por separado — pide detalles por WhatsApp.",
+      "descripcion": "Conjunto completo de gala: incluye blusa tabasqueña, cinturón y falda de gala azul marino con tiras bordadas a juego en punto de lomillo, hecho a mano. La blusa y la falda también se pueden comprar por separado — pide detalles por WhatsApp.",
       "imagen": "assets/img/productos/conjunto-tradicional-azul.jpg",
-      "tipoPrecio": "talla",
-      "tallas": ["Chica", "Mediana", "Grande"]
+      "tipoPrecio": "fijo",
+      "precio": 6000,
+      "unidad": "conjunto"
     },
     {
       "id": "camisa-bordada-hombre",
@@ -54,7 +55,7 @@
       "descripcion": "Camisa blanca de manga larga con cuello mao y tiras bordadas en punto de lomillo a los costados, hecha a mano.",
       "imagen": "assets/img/productos/camisa-bordada-hombre.jpg",
       "tipoPrecio": "talla",
-      "tallas": ["Chica", "Mediana", "Grande"]
+      "tallas": ["39", "40", "42", "43"]
     },
     {
       "id": "tira-hibiscus-negro",

@@ -10,7 +10,11 @@ const RUTA_DATOS = 'assets/data/productos.json';
 /**
  * Si "hojaCalculoCSV" viene definido en productos.json, se espera un Google Sheet
  * publicado en la web como CSV (Archivo > Compartir > Publicar en la web > CSV)
- * con columnas: id, precio, unidad, disponible, precio_chica, precio_mediana, precio_grande
+ * con columnas: id, precio, unidad, disponible, y una columna "precio_<talla>"
+ * por cada talla que maneje el producto (ej. precio_chica, precio_39, precio_extragrande).
+ * La parte después de "precio_" debe coincidir con la talla normalizada (minúsculas,
+ * sin acentos ni espacios) — así cualquier producto puede tener sus propias tallas,
+ * sean letras (Chica/Mediana/Grande) o números (39/40/42/43).
  *
  * Fila especial opcional: id = "config-precio-punto", columna "precio" = costo por
  * puntada por metro (ej. 22). Si no existe esa fila, se usa precioPorPuntadaDefault
@@ -18,6 +22,14 @@ const RUTA_DATOS = 'assets/data/productos.json';
  *
  * Esto permite actualizar precios sin tocar el código del sitio.
  */
+function normalizarClaveTalla(texto) {
+  return String(texto)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // quita acentos
+    .replace(/\s+/g, '');
+}
+
 async function obtenerDatosDesdeHoja(url) {
   if (!url) return { productos: {}, precioPorPuntada: null };
 
@@ -34,9 +46,13 @@ async function obtenerDatosDesdeHoja(url) {
     const idxPrecio = idx('precio');
     const idxUnidad = idx('unidad');
     const idxDisponible = idx('disponible');
-    const idxChica = idx('precio_chica');
-    const idxMediana = idx('precio_mediana');
-    const idxGrande = idx('precio_grande');
+
+    // Cualquier columna "precio_algo" se interpreta como precio de esa talla
+    const columnasTalla = [];
+    encabezados.forEach((h, i) => {
+      const coincide = h.match(/^precio_(.+)$/);
+      if (coincide) columnasTalla.push({ clave: coincide[1], indice: i });
+    });
 
     const numero = (valor) => {
       if (!valor) return null;
@@ -56,13 +72,17 @@ async function obtenerDatosDesdeHoja(url) {
         return;
       }
 
+      const preciosPorTalla = {};
+      columnasTalla.forEach(({ clave, indice }) => {
+        const valor = numero(fila[indice]);
+        if (valor != null) preciosPorTalla[clave] = valor;
+      });
+
       mapa[id] = {
         precio: idxPrecio >= 0 ? numero(fila[idxPrecio]) : null,
         unidad: idxUnidad >= 0 ? fila[idxUnidad].trim() : null,
         disponible: idxDisponible >= 0 ? fila[idxDisponible].trim().toLowerCase() !== 'no' : true,
-        precioChica: idxChica >= 0 ? numero(fila[idxChica]) : null,
-        precioMediana: idxMediana >= 0 ? numero(fila[idxMediana]) : null,
-        precioGrande: idxGrande >= 0 ? numero(fila[idxGrande]) : null,
+        preciosPorTalla,
       };
     });
 
@@ -97,8 +117,7 @@ function crearBloquePrecio(producto) {
     const idSelect = `talla-${producto.id}`;
     const opciones = producto.tallas
       .map((talla) => {
-        const clave = `precio${talla}`; // precioChica / precioMediana / precioGrande
-        const tienePrecio = producto[clave] != null;
+        const tienePrecio = producto.preciosPorTalla[normalizarClaveTalla(talla)] != null;
         return `<option value="${talla}">${talla}${tienePrecio ? '' : ' (consultar)'}</option>`;
       })
       .join('');
@@ -162,8 +181,7 @@ function actualizarPrecioMostrado(card, producto) {
 
   if (producto.tipoPrecio === 'talla') {
     const talla = card.querySelector('[data-rol="talla"]').value;
-    const clave = `precio${talla}`;
-    const precio = producto[clave];
+    const precio = producto.preciosPorTalla[normalizarClaveTalla(talla)];
 
     elementoPrecio.innerHTML = precio
       ? `${formatoMXN(precio)} <span>/ talla ${talla.toLowerCase()}</span>`
@@ -305,9 +323,7 @@ function construirOfertaProducto(producto) {
     : 'https://schema.org/InStock';
 
   if (producto.tipoPrecio === 'talla') {
-    const precios = ['precioChica', 'precioMediana', 'precioGrande']
-      .map((clave) => producto[clave])
-      .filter((precio) => precio != null);
+    const precios = Object.values(producto.preciosPorTalla || {});
 
     if (!precios.length) return null;
 
@@ -406,9 +422,7 @@ async function iniciarCatalogo() {
         precio: override.precio ?? producto.precio ?? null,
         unidad: override.unidad || producto.unidad,
         disponible: override.disponible,
-        precioChica: override.precioChica ?? null,
-        precioMediana: override.precioMediana ?? null,
-        precioGrande: override.precioGrande ?? null,
+        preciosPorTalla: override.preciosPorTalla || {},
         precioPorPuntada: tarifaPuntada,
         likes: conteosLikes[producto.id] || 0,
       };
