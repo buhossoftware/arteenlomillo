@@ -7,6 +7,7 @@
     { "id": "todas", "nombre": "Todas" },
     { "id": "blusas", "nombre": "Blusas bordadas" },
     { "id": "conjuntos", "nombre": "Conjuntos" },
+    { "id": "hombres", "nombre": "Hombres" },
     { "id": "tiras", "nombre": "Tiras bordadas" }
   ],
   "productos": [
@@ -32,8 +33,26 @@
       "id": "conjunto-falda-blusa",
       "categoria": "conjuntos",
       "nombre": "Conjunto Blusa y Falda con Diseño",
-      "descripcion": "Falda floral con tiras bordadas a juego y blusa blanca de escote descubierto, conjunto completo hecho a mano.",
+      "descripcion": "Falda floral con tiras bordadas a juego y blusa blanca de escote descubierto, conjunto completo hecho a mano. La blusa y la falda también se pueden comprar por separado — pide detalles por WhatsApp.",
       "imagen": "assets/img/productos/conjunto-falda-blusa.jpg",
+      "tipoPrecio": "talla",
+      "tallas": ["Chica", "Mediana", "Grande"]
+    },
+    {
+      "id": "conjunto-tradicional-azul",
+      "categoria": "conjuntos",
+      "nombre": "Conjunto Tradicional Azul Marino",
+      "descripcion": "Falda azul marino con cuatro tiras bordadas a juego en punto de lomillo y blusa blanca de escote descubierto, conjunto completo hecho a mano. La blusa y la falda también se pueden comprar por separado — pide detalles por WhatsApp.",
+      "imagen": "assets/img/productos/conjunto-tradicional-azul.jpg",
+      "tipoPrecio": "talla",
+      "tallas": ["Chica", "Mediana", "Grande"]
+    },
+    {
+      "id": "camisa-bordada-hombre",
+      "categoria": "hombres",
+      "nombre": "Camisa Bordada para Hombre",
+      "descripcion": "Camisa blanca de manga larga con cuello mao y tiras bordadas en punto de lomillo a los costados, hecha a mano.",
+      "imagen": "assets/img/productos/camisa-bordada-hombre.jpg",
       "tipoPrecio": "talla",
       "tallas": ["Chica", "Mediana", "Grande"]
     },

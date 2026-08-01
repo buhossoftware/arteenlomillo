@@ -291,6 +291,97 @@ function filtrarGrid(grid, categoriaId) {
   });
 }
 
+const SITIO_URL = 'https://arteenlomillo.com';
+
+/**
+ * Arma el bloque "offers" de un producto para Schema.org, usando siempre
+ * los precios ya resueltos (mezcla de productos.json + Google Sheet) en
+ * el momento de la carga. Así nunca queda desincronizado con lo que se
+ * le muestra al visitante.
+ */
+function construirOfertaProducto(producto) {
+  const disponibilidad = producto.disponible === false
+    ? 'https://schema.org/OutOfStock'
+    : 'https://schema.org/InStock';
+
+  if (producto.tipoPrecio === 'talla') {
+    const precios = ['precioChica', 'precioMediana', 'precioGrande']
+      .map((clave) => producto[clave])
+      .filter((precio) => precio != null);
+
+    if (!precios.length) return null;
+
+    if (precios.length === 1) {
+      return { '@type': 'Offer', priceCurrency: 'MXN', price: precios[0], availability: disponibilidad };
+    }
+
+    return {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'MXN',
+      lowPrice: Math.min(...precios),
+      highPrice: Math.max(...precios),
+      offerCount: precios.length,
+      availability: disponibilidad,
+    };
+  }
+
+  if (producto.tipoPrecio === 'puntada') {
+    const precios = producto.puntadasDisponibles.map((p) => p * producto.precioPorPuntada);
+
+    if (precios.length === 1) {
+      return {
+        '@type': 'Offer',
+        priceCurrency: 'MXN',
+        price: precios[0],
+        availability: disponibilidad,
+        priceSpecification: { '@type': 'UnitPriceSpecification', price: precios[0], priceCurrency: 'MXN', unitText: 'metro' },
+      };
+    }
+
+    return {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'MXN',
+      lowPrice: Math.min(...precios),
+      highPrice: Math.max(...precios),
+      offerCount: precios.length,
+      availability: disponibilidad,
+    };
+  }
+
+  if (producto.precio) {
+    return { '@type': 'Offer', priceCurrency: 'MXN', price: producto.precio, availability: disponibilidad };
+  }
+
+  return null;
+}
+
+function inyectarDatosEstructuradosProductos(productos) {
+  const items = productos
+    .map((producto) => {
+      const offers = construirOfertaProducto(producto);
+      if (!offers) return null;
+
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: producto.nombre,
+        description: producto.descripcion,
+        image: `${SITIO_URL}/${producto.imagen}`,
+        category: 'Ropa y accesorios bordados a mano',
+        brand: { '@type': 'Brand', name: 'Arte en Lomillo' },
+        offers,
+      };
+    })
+    .filter(Boolean);
+
+  if (!items.length) return;
+
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(items);
+  document.head.appendChild(script);
+}
+
 async function iniciarCatalogo() {
   const contenedorTabs = document.querySelector('[data-catalogo-tabs]');
   const grid = document.querySelector('[data-catalogo-grid]');
@@ -302,9 +393,11 @@ async function iniciarCatalogo() {
     if (!respuesta.ok) throw new Error('No se pudo cargar el catálogo.');
     const datos = await respuesta.json();
 
-    const { productos: preciosHoja, precioPorPuntada } = await obtenerDatosDesdeHoja(datos.hojaCalculoCSV);
+    const [{ productos: preciosHoja, precioPorPuntada }, conteosLikes] = await Promise.all([
+      obtenerDatosDesdeHoja(datos.hojaCalculoCSV),
+      obtenerConteosDesdeScript(datos.likesScriptURL),
+    ]);
     const tarifaPuntada = precioPorPuntada ?? datos.precioPorPuntadaDefault ?? 22;
-    const conteosLikes = await obtenerConteosDesdeScript(datos.likesScriptURL);
 
     datos.productos = datos.productos.map((producto) => {
       const override = preciosHoja[producto.id] || {};
@@ -338,6 +431,8 @@ async function iniciarCatalogo() {
     if (datos.categorias[0]) {
       filtrarGrid(grid, datos.categorias[0].id);
     }
+
+    inyectarDatosEstructuradosProductos(datos.productos);
 
     window.dispatchEvent(new Event('catalogo:listo'));
   } catch (error) {
